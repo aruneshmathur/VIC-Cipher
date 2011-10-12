@@ -2,6 +2,16 @@
 #include<stdlib.h>
 #include<string.h>
 
+int* modular_addition_digit(int *a, int *b, int size) {
+
+	int* new_arr = malloc(sizeof(int) * size), i;
+	for(i = 0; i < size; i++) {
+		new_arr[i] = (a[i] + b[i]) % 10;
+	}
+		
+	return new_arr;
+}
+
 void cumulate(int *a, int size) {
 	int i;
 	for(i = 1; i < size; i++) {
@@ -9,25 +19,14 @@ void cumulate(int *a, int size) {
 	}
 }
 
-int* assign(char *arr, int size, char type) {
+int* assign(char *arr, int size, int b) {
 
  	int hash[26], base, i;
 	memset(hash, 0, sizeof(hash));
 
 	int* new_arr = malloc(sizeof(arr));
 
-	switch(type) {
-		case 'a': base = 97; 
-			break;	
-		case 'A': base = 65;
-			break;
-		
-		case 'n':
-		case 'N':
-			base = 48;
-		default:
-			return NULL;
-	}
+	base = b;
 
 	for(i = 0; i < size; i++) {
 		hash[arr[i]-base]++;
@@ -58,7 +57,7 @@ int* chain_addition(int *arr, int size) {
 int main() {
 
 	char array[10] = { 'A', 'N', 'N', 'I', 'E', 'W', 'I', 'T', 'H', 'T'}; 
-	int* res = assign(array, 10, 'A'), i;
+	int* res = assign(array, 10, 65), i;
 	for(i=0;i<10;i++) printf("%d ", res[i]);
 
 	return 0;
