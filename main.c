@@ -32,12 +32,13 @@ void cumulative_sum(int *a, int size) {
 
 int* assign(char *arr, int size, int b) {
 
- 	int hash[26], base, i;
+ 	int hash[26], base, i, diff;
 	memset(hash, 0, sizeof(hash));
 
 	int* new_arr = malloc(sizeof(arr));
 
 	base = b;
+	diff = (b == 65) ? 0 : 1;
 
 	for(i = 0; i < size; i++) {
 		hash[arr[i]-base]++;
@@ -46,7 +47,8 @@ int* assign(char *arr, int size, int b) {
 	cumulative_sum(hash, 26);
 
 	for(i = size - 1; i >= 0; i--) {
-		new_arr[i] = (hash[arr[i]-base]--) % 10;
+		new_arr[i] = (hash[arr[i]-base] - diff) % 10;
+		hash[arr[i]-base]--;
 	}
 
 	return new_arr;
@@ -67,8 +69,8 @@ int* chain_addition(int *arr, int size) {
 
 int main() {
 
-	char array[10] = { 'A', 'N', 'N', 'I', 'E', 'W', 'I', 'T', 'H', 'T'}; 
-	int* res = assign(array, 10, 65), i;
+	char array[10] = {  '1', '2', '0', '4', '3', '3', '9', '6', '6', '9' }; 
+	int* res = assign(array, 10, 48), i;
 	for(i=0;i<10;i++) printf("%d ", res[i]);
 
 	return 0;
