@@ -2,6 +2,17 @@
 #include<stdlib.h>
 #include<string.h>
 
+int* map_change(int* code, int *input, int size) {
+
+	int* result = malloc(sizeof(int) * size), i;
+	
+	for(i = 0; i < size; i++) {
+		result[i] = code[input[i]];
+	}
+
+	return result;
+}
+
 int* modular_addition_digit(int *a, int *b, int size) {
 
 	int* new_arr = malloc(sizeof(int) * size), i;
@@ -12,7 +23,7 @@ int* modular_addition_digit(int *a, int *b, int size) {
 	return new_arr;
 }
 
-void cumulate(int *a, int size) {
+void cumulative_sum(int *a, int size) {
 	int i;
 	for(i = 1; i < size; i++) {
 		a[i] = a[i] + a[i-1];
@@ -32,7 +43,7 @@ int* assign(char *arr, int size, int b) {
 		hash[arr[i]-base]++;
 	}
 	
-	cumulate(hash, 26);
+	cumulative_sum(hash, 26);
 
 	for(i = size - 1; i >= 0; i--) {
 		new_arr[i] = (hash[arr[i]-base]--) % 10;
