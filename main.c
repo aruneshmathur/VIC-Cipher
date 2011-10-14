@@ -2,16 +2,30 @@
 #include<stdlib.h>
 #include<string.h>
 
-int** transpose(int* header, int **array, int size) {
-	int hash[11], i;
+void cumulative_sum(int *a, int size) {
+	int i;
+	for(i = 1; i < size; i++) {
+		a[i] = a[i] + a[i-1];
+	}
+}
+
+int** transpose(int* header, int **array, int header_columns, int array_rows) {
+	int hash[10], i, j;
+	int** m;
 
 	memset(hash, 0, sizeof(hash));
 
-	for(i = 1; i < 11; i++) {
+	for(i = 0; i < header_columns; i++) {
 		hash[header[i]]++;
 	}
 
-	cumulative_sum(hash, 11);
+	cumulative_sum(hash, 10);
+
+	m = malloc(sizeof(int) * header_columns * array_rows);
+	
+
+	
+	return NULL;
 }
 
 int* map_change(int* code, int *input, int size) {
@@ -35,14 +49,7 @@ int* modular_addition_digit(int *a, int *b, int size) {
 	return new_arr;
 }
 
-void cumulative_sum(int *a, int size) {
-	int i;
-	for(i = 1; i < size; i++) {
-		a[i] = a[i] + a[i-1];
-	}
-}
-
-int* assign(void* arr, int size, int b) {
+int* assign(char* arr, int size, int b) {
 
  	int hash[26], base, i, diff;
 	memset(hash, 0, sizeof(hash));
@@ -81,9 +88,12 @@ int* chain_addition(int *arr, int size) {
 
 int main() {
 
-	char array[10] = {  '1', '2', '0', '4', '3', '3', '9', '6', '6', '9' }; 
+	/*char array[10] = {  '1', '2', '0', '4', '3', '3', '9', '6', '6', '9' }; 
 	int* res = assign(array, 10, 48), i;
-	for(i=0;i<10;i++) printf("%d ", res[i]);
+	for(i=0;i<10;i++) printf("%d ", res[i]);*/
+
+	int a[14] = {3,6,5,3,4,6,9,3,2,3,3,9,2,8};
+	transpose(a, NULL, 14);
 
 	return 0;
 }
