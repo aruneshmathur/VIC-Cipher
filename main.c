@@ -2,6 +2,18 @@
 #include<stdlib.h>
 #include<string.h>
 
+int** transpose(int* header, int **array, int size) {
+	int hash[11], i;
+
+	memset(hash, 0, sizeof(hash));
+
+	for(i = 1; i < 11; i++) {
+		hash[header[i]]++;
+	}
+
+	cumulative_sum(hash, 11);
+}
+
 int* map_change(int* code, int *input, int size) {
 
 	int* result = malloc(sizeof(int) * size), i;
@@ -30,7 +42,7 @@ void cumulative_sum(int *a, int size) {
 	}
 }
 
-int* assign(char *arr, int size, int b) {
+int* assign(void* arr, int size, int b) {
 
  	int hash[26], base, i, diff;
 	memset(hash, 0, sizeof(hash));
