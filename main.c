@@ -10,20 +10,22 @@ void cumulative_sum(int *a, int size) {
 }
 
 int** transpose(int* header, int **array, int header_columns, int array_rows) {
-	int hash[10], i, j;
-	int** m;
+	int hash[11], i, j;
+	int (*m)[header_columns];
 
 	memset(hash, 0, sizeof(hash));
 
-	for(i = 0; i < header_columns; i++) {
-		hash[header[i]]++;
+	for(i = 1; i < header_columns; i++) {
+		(header[i] == 0) ? hash[10]++ : hash[header[i]]++;
 	}
 
-	cumulative_sum(hash, 10);
-
-	m = malloc(sizeof(int) * header_columns * array_rows);
+	cumulative_sum(hash, 11);
 	
+	for(i = header_columns - 1; i >= 0; i--) {
+		for(j = 0; j < array_rows; j++) {
 
+		}
+	}
 	
 	return NULL;
 }
@@ -93,7 +95,7 @@ int main() {
 	for(i=0;i<10;i++) printf("%d ", res[i]);*/
 
 	int a[14] = {3,6,5,3,4,6,9,3,2,3,3,9,2,8};
-	transpose(a, NULL, 14);
+ 	//transpose(a, NULL, 14);
 
 	return 0;
 }
