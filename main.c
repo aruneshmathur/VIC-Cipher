@@ -76,9 +76,9 @@ int* modular_addition_digit(int *a, int *b, int size) {
 int* assign(char* arr, int size, int b) {
 
  	int hash[26], base, i, diff;
-	memset(hash, 0, sizeof(hash));
-
 	int* new_arr = malloc(sizeof(arr));
+
+	memset(hash, 0, sizeof(hash));
 
 	base = b;
 	diff = (b == 65) ? 0 : 1;
@@ -126,10 +126,12 @@ int main() {
 		
  	transpose(a, b, 10, 5);*/
 
-	int a[10] = {1, 2, 0, 5, 3, 4, 8, 6, 7, 9};
+	int a[10] = {1, 2, 0, 5, 3, 4, 8, 6, 7, 9}, b;
 	init_checkerboard(a, 10);
-	int b = get_val('W');
+	b = get_val('B');
 	printf("%d\n", b);
+
+	free_checkerboard();
 
 	return 0;
 }

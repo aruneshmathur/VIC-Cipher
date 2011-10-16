@@ -5,11 +5,11 @@ int *header = NULL;
 int **list;
 
 int init_checkerboard(int *arr, int size) {
+	int i;
 
 	if(size != 10) return 0;	
 	header = arr;
 	
-	int i;
 	list = malloc(sizeof(int*) * 26);
 
 	for(i = 0; i < 26; i++) {
@@ -49,9 +49,19 @@ int init_checkerboard(int *arr, int size) {
 }
 
 int get_val(char c) {
+	int b;
 	if(header == NULL) return -1;
-	int b = (int)(c - 65);
+	b = (int)(c - 65);
 	return *list[b];	
 }
 
+void free_checkerboard() {
+	int i;
+	for(i = 0; i < 26; i++) {
+		free(list[i]);
+	}
+	free(list);
+
+	list = NULL;
+}
 
