@@ -11,23 +11,31 @@ void cumulative_sum(int *a, int size) {
 
 int** transpose(int* header, int **array, int header_columns, int array_rows) {
 	int hash[11], i, j;
-	int (*m)[header_columns];
+	int **m;
 
 	memset(hash, 0, sizeof(hash));
 
-	for(i = 1; i < header_columns; i++) {
+	for(i = 0; i < header_columns; i++) {
 		(header[i] == 0) ? hash[10]++ : hash[header[i]]++;
 	}
 
 	cumulative_sum(hash, 11);
 	
-	for(i = header_columns - 1; i >= 0; i--) {
-		for(j = 0; j < array_rows; j++) {
+	m = malloc(sizeof(int*) * header_columns);
+	for(i = 0; i < header_columns; i++)
+		m[i] = malloc(sizeof(int) * array_rows);
 
+	
+	for(j = header_columns - 1; j >= 0; j--) {
+		if(header[j] == 0) hash[10]--; else hash[header[j]]--;
+
+		for(i = 0; i < array_rows; i++) {
+			if(header[j] == 0) m[hash[10]][i] = array[i][j];
+			else m[hash[header[j]]][i] = array[i][j];
 		}
 	}
-	
-	return NULL;
+		
+	return m;
 }
 
 int* map_change(int* code, int *input, int size) {
@@ -90,12 +98,19 @@ int* chain_addition(int *arr, int size) {
 
 int main() {
 
-	/*char array[10] = {  '1', '2', '0', '4', '3', '3', '9', '6', '6', '9' }; 
-	int* res = assign(array, 10, 48), i;
-	for(i=0;i<10;i++) printf("%d ", res[i]);*/
-
-	int a[14] = {3,6,5,3,4,6,9,3,2,3,3,9,2,8};
- 	//transpose(a, NULL, 14);
+	int a[10] = {0, 2, 2, 1, 2, 1, 5, 8, 3, 1};
+	int **b, *c;
+	b= malloc(sizeof(int*) *5);
+	c=a;
+	int i, j;
+	
+	for(i=0;i<5;i++) {
+		c=chain_addition(c,10);
+		b[i]=c;
+	
+	}
+		
+ 	transpose(a, b, 10, 5);
 
 	return 0;
 }
