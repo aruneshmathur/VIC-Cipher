@@ -1,13 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include "checkerboard.h"
 
 void change(int *arr, int size, int from, int to) {
 
+	int i;
 	for(i = 0; i < size; i++) {
-		if(header[i] == from) header[i] = to;
+		if(arr[i] == from) arr[i] = to;
 	}
-
 }
 
 void cumulative_sum(int *a, int size) {
