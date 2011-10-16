@@ -112,7 +112,7 @@ int* chain_addition(int *arr, int size) {
 
 int main() {
 
-	int a[10] = {0, 2, 2, 1, 2, 1, 5, 8, 3, 1};
+	/*int a[10] = {0, 2, 2, 1, 2, 1, 5, 8, 3, 1};
 	int **b, *c;
 	b= malloc(sizeof(int*) *5);
 	c=a;
@@ -124,7 +124,12 @@ int main() {
 	
 	}
 		
- 	transpose(a, b, 10, 5);
+ 	transpose(a, b, 10, 5);*/
+
+	int a[10] = {1, 2, 0, 5, 3, 4, 8, 6, 7, 9};
+	init_checkerboard(a, 10);
+	int b = get_val('W');
+	printf("%d\n", b);
 
 	return 0;
 }
