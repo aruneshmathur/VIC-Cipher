@@ -2,6 +2,14 @@
 #include<stdlib.h>
 #include<string.h>
 
+void change(int *arr, int size, int from, int to) {
+
+	for(i = 0; i < size; i++) {
+		if(header[i] == from) header[i] = to;
+	}
+
+}
+
 void cumulative_sum(int *a, int size) {
 	int i;
 	for(i = 1; i < size; i++) {
@@ -12,11 +20,13 @@ void cumulative_sum(int *a, int size) {
 int** transpose(int* header, int **array, int header_columns, int array_rows) {
 	int hash[11], i, j;
 	int **m;
+	
+	change(header, header_columns, 0, 10);
 
 	memset(hash, 0, sizeof(hash));
 
 	for(i = 0; i < header_columns; i++) {
-		(header[i] == 0) ? hash[10]++ : hash[header[i]]++;
+		hash[header[i]]++;
 	}
 
 	cumulative_sum(hash, 11);
@@ -27,14 +37,17 @@ int** transpose(int* header, int **array, int header_columns, int array_rows) {
 
 	
 	for(j = header_columns - 1; j >= 0; j--) {
-		if(header[j] == 0) hash[10]--; else hash[header[j]]--;
+
+		hash[header[j]]--;
 
 		for(i = 0; i < array_rows; i++) {
-			if(header[j] == 0) m[hash[10]][i] = array[i][j];
-			else m[hash[header[j]]][i] = array[i][j];
+			m[hash[header[j]]][i] = array[i][j];
 		}
 	}
-		
+
+
+	change(header, header_columns, 10, 0);
+
 	return m;
 }
 
