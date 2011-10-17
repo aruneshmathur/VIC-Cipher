@@ -51,7 +51,8 @@ int init_checkerboard(int *arr, int size) {
 int get_val(char c) {
 	int b;
 	if(header == NULL) return -1;
-	b = (int)(c - 65);
+	b = (c - 65);
+
 	return *list[b];	
 }
 

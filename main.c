@@ -3,6 +3,34 @@
 #include<string.h>
 #include "checkerboard.h"
 
+int* encode(char* message, int* header, int length) {
+	int i, t, count;
+	int *result = malloc(sizeof(int) * length * 2); 
+	count = 0;
+	init_checkerboard(header, 10);
+	
+	for(i = 0; i < length; i++) {
+		t = get_val(message[i]);
+
+		if(t < 0) {
+			t+=10; 
+			t=-t;
+			result[count++] = 0;
+			result[count++] = t;
+
+		} else if(t >=0 && t <=9) {
+			result[count++] = t;
+		} else {
+			result[count++] = 8;
+			result[count++] = t % 10;
+		}
+	}
+	result[count] = NULL;
+
+	free_checkerboard();
+	return result;
+}
+
 void change(int *arr, int size, int from, int to) {
 
 	int i;
@@ -126,12 +154,17 @@ int main() {
 		
  	transpose(a, b, 10, 5);*/
 
-	int a[10] = {1, 2, 0, 5, 3, 4, 8, 6, 7, 9}, b;
-	init_checkerboard(a, 10);
-	b = get_val('B');
-	printf("%d\n", b);
+	int a[10] = {1, 2, 0, 5, 3, 4, 8, 6, 7, 9}, i;
+	char *b = "WE ARE PLEASED TO HEAR OF YOUR SUCCESS IN ESTABLISHING YOUR FALSE IDENTITY YOU WILL BE SENT SOME MONEY TO COVER EXPENSES WITHIN A MONTH";
 
-	free_checkerboard();
+	int* d = encode(b, a, 135);
 
+	i=0;
+	/*while(d[i]!=NULL) {
+		printf("%d", d[i]);
+	}*/
+
+	printf("\n");
+	
 	return 0;
 }
