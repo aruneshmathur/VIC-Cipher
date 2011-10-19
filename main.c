@@ -10,8 +10,9 @@ int* encode(char* message, int* header, int length) {
 	init_checkerboard(header, 10);
 	
 	for(i = 0; i < length; i++) {
+		if(message[i] == ' ') continue;
 		t = get_val(message[i]);
-
+	
 		if(t < 0) {
 			t+=10; 
 			t=-t;
@@ -160,9 +161,11 @@ int main() {
 	int* d = encode(b, a, 135);
 
 	i=0;
-	/*while(d[i]!=NULL) {
-		printf("%d", d[i]);
-	}*/
+
+	while(d[i]!=NULL) {
+		printf("%d ", d[i]);
+		i++;
+	}
 
 	printf("\n");
 	
