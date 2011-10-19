@@ -26,7 +26,8 @@ int* encode(char* message, int* header, int length) {
 			result[count++] = t % 10;
 		}
 	}
-	result[count] = NULL;
+
+	result[count] = -1;
 
 	free_checkerboard();
 	return result;
@@ -162,7 +163,7 @@ int main() {
 
 	i=0;
 
-	while(d[i]!=NULL) {
+	while(d[i] != -1) {
 		printf("%d ", d[i]);
 		i++;
 	}
