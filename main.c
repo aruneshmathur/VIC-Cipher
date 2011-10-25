@@ -1,152 +1,51 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "checkerboard.h"
-
-int* encode(char* message, int* header, int length) {
-	int i, t, count;
-	int *result = malloc(sizeof(int) * length * 2); 
-	count = 0;
-	init_checkerboard(header, 10);
-	
-	for(i = 0; i < length; i++) {
-		if(message[i] == ' ') continue;
-		t = get_val(message[i]);
-	
-		if(t < 0) {
-			t+=10; 
-			t=-t;
-			result[count++] = 0;
-			result[count++] = t;
-
-		} else if(t >=0 && t <=9) {
-			result[count++] = t;
-		} else {
-			result[count++] = 8;
-			result[count++] = t % 10;
-		}
-	}
-
-	result[count] = -1;
-
-	free_checkerboard();
-	return result;
-}
-
-void change(int *arr, int size, int from, int to) {
-
-	int i;
-	for(i = 0; i < size; i++) {
-		if(arr[i] == from) arr[i] = to;
-	}
-}
-
-void cumulative_sum(int *a, int size) {
-	int i;
-	for(i = 1; i < size; i++) {
-		a[i] = a[i] + a[i-1];
-	}
-}
-
-int** transpose(int* header, int **array, int header_columns, int array_rows) {
-	int hash[11], i, j;
-	int **m;
-	
-	change(header, header_columns, 0, 10);
-
-	memset(hash, 0, sizeof(hash));
-
-	for(i = 0; i < header_columns; i++) {
-		hash[header[i]]++;
-	}
-
-	cumulative_sum(hash, 11);
-	
-	m = malloc(sizeof(int*) * header_columns);
-	for(i = 0; i < header_columns; i++)
-		m[i] = malloc(sizeof(int) * array_rows);
-
-	
-	for(j = header_columns - 1; j >= 0; j--) {
-
-		hash[header[j]]--;
-
-		for(i = 0; i < array_rows; i++) {
-			m[hash[header[j]]][i] = array[i][j];
-		}
-	}
-
-
-	change(header, header_columns, 10, 0);
-
-	return m;
-}
-
-int* map_change(int* code, int *input, int size) {
-
-	int* result = malloc(sizeof(int) * size), i;
-	
-	for(i = 0; i < size; i++) {
-		result[i] = code[input[i]];
-	}
-
-	return result;
-}
-
-int* modular_addition_digit(int *a, int *b, int size) {
-
-	int* new_arr = malloc(sizeof(int) * size), i;
-	for(i = 0; i < size; i++) {
-		new_arr[i] = (a[i] + b[i]) % 10;
-	}
-		
-	return new_arr;
-}
-
-int* assign(char* arr, int size, int b) {
-
- 	int hash[26], base, i, diff;
-	int* new_arr = malloc(sizeof(arr));
-
-	memset(hash, 0, sizeof(hash));
-
-	base = b;
-	diff = (b == 65) ? 0 : 1;
-
-	for(i = 0; i < size; i++) {
-		hash[arr[i]-base]++;
-	}
-	
-	cumulative_sum(hash, 26);
-
-	for(i = size - 1; i >= 0; i--) {
-		new_arr[i] = (hash[arr[i]-base] - diff) % 10;
-		hash[arr[i]-base]--;
-	}
-
-	return new_arr;
-}
-		
-
-int* chain_addition(int *arr, int size) {
-	int *new_arr = malloc(size * sizeof(int)), i;
-
-	for(i = 0; i < size - 1; i++) {
-		new_arr[i] = (arr[i] + arr[i+1]) % 10;
-	}
-
-	new_arr[i] = (arr[size - 1] + new_arr[0]) % 10;
-
-	return new_arr;
-}
+#include "operations.h"
 
 int main() {
 
-	int a[10] = {0, 2, 2, 1, 2, 1, 5, 8, 3, 1};
-	int **b, *c;
+	int i;
+	int date[5] = {7, 4, 1, 7, 7};
+	int random_ig[5] = {7, 7, 6, 5, 1};
+	int* temp;
+
+	int* sub_result = modular_subtraction_digit(random_ig, date, 5);
+	char* key_phrase = "IDREAMOFJEANNIEWITHT";
+
+	int* first = assign_char(key_phrase, 0, 10, 65); 
+	int* second = assign_char(key_phrase, 10, 10, 65); 
+
+	int* chain_res = chain_addition(sub_result, 5);
+
+	int* append_res = join(sub_result, 5, chain_res, 5);
+	
+	free(sub_result);
+	free(chain_res);
+	
+	int* first_app_res = modular_addition_digit(first, append_res, 10);
+	
+	int* assign_res = map_change(second, first_app_res, 10);
+	
+	int** pseudo_random = malloc(sizeof(int*) * 5);
+
+	temp = assign_res;
+	for(i=0;i<5;i++) {
+		temp=chain_addition(temp,10);
+		pseudo_random[i]=temp;
+	}
+
+	int** trans_res = transpose(assign_res, pseudo_random, 10, 5);
+
+	int* header_checker = assign_int(pseudo_random[4], 0, 10);
+	for(i = 0; i < 10; i++) {
+		printf("%d ", header_checker[i]);
+	}
+	/*int a[10] = {0, 2, 2, 1, 2, 1, 5, 8, 3, 1};
+	int **b, *c, *d; int i, first, second;
+	char *e;
 	b= malloc(sizeof(int*) *5);
 	c=a;
-	int i, j;
 	
 	for(i=0;i<5;i++) {
 		c=chain_addition(c,10);
@@ -156,14 +55,14 @@ int main() {
 		
  	transpose(a, b, 10, 5);
 
-	int first = b[4][8];
-	int second = b[4][9];
+	first = b[4][8];
+	second = b[4][9];
 
 	printf("%d %d\n", first, second);
 
-	char *e = "WE ARE PLEASED TO HEAR OF YOUR SUCCESS IN ESTABLISHING YOUR FALSE IDENTITY YOU WILL BE SENT SOME MONEY TO COVER EXPENSES WITHIN A MONTH";
+	e = "WE ARE PLEASED TO HEAR OF YOUR SUCCESS IN ESTABLISHING YOUR FALSE IDENTITY YOU WILL BE SENT SOME MONEY TO COVER EXPENSES WITHIN A MONTH";
 
-	int* d = encode(e, a, 135);
+	d = encode(e, a, 135);
 
 	i=0;
 
@@ -172,7 +71,9 @@ int main() {
 		i++;
 	}
 
-	printf("\n");
+	
+
+	printf("\n");*/
 	
 	return 0;
 }

@@ -1,12 +1,15 @@
 CC = gcc
 CFLAGS = -ansi -pedantic -Wall -g
 
-a.out: checkerboard.o main.o
-	$(CC) $(CFLAGS) -o a.out checkerboard.o main.o
+a.out: checkerboard.o main.o operations.o
+	$(CC) $(CFLAGS) -o a.out checkerboard.o main.o operations.o
 
 checkerboard.o: checkerboard.c checkerboard.h
 	$(CC) $(CFLAGS) -c checkerboard.c
 
-main.o: main.c checkerboard.h
+operations.o: operations.c checkerboard.h
+	$(CC) $(CFLAGS) -c operations.c
+
+main.o: main.c operations.h
 	$(CC) $(CFLAGS) -c main.c
 

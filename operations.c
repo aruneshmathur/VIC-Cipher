@@ -88,10 +88,20 @@ int* map_change(int* code, int *input, int size) {
 	int* result = malloc(sizeof(int) * size), i;
 	
 	for(i = 0; i < size; i++) {
-		result[i] = code[input[i]];
+		result[i] = code[input[i] - 1];
 	}
 
 	return result;
+}
+
+int* modular_subtraction_digit(int *a, int *b, int size) {
+	int* new_arr = malloc(sizeof(int) * size), i;
+	for(i = 0; i < size; i++) {
+		new_arr[i] = (a[i] - b[i] + 10) % 10;
+	}
+		
+	return new_arr;
+
 }
 
 int* modular_addition_digit(int *a, int *b, int size) {
@@ -104,7 +114,7 @@ int* modular_addition_digit(int *a, int *b, int size) {
 	return new_arr;
 }
 
-int* assign(char* arr, int size, int b) {
+int* assign_char(char* arr, int start, int size, int b) {
 
  	int hash[26], base, i, diff;
 	int* new_arr = malloc(sizeof(arr));
@@ -114,15 +124,38 @@ int* assign(char* arr, int size, int b) {
 	base = b;
 	diff = (b == 65) ? 0 : 1;
 
-	for(i = 0; i < size; i++) {
+	for(i = start; i < start + size; i++) {
 		hash[arr[i]-base]++;
 	}
 	
 	cumulative_sum(hash, 26);
 
-	for(i = size - 1; i >= 0; i--) {
-		new_arr[i] = (hash[arr[i]-base] - diff) % 10;
+	for(i = start + size - 1; i >= start; i--) {
+		new_arr[i - start] = (hash[arr[i] - base] - diff) % 10;
 		hash[arr[i]-base]--;
+	}
+
+	return new_arr;
+}
+
+int* assign_int(int* arr, int start, int size) {
+
+ 	int hash[26], i, diff;
+	int* new_arr = malloc(sizeof(arr));
+
+	memset(hash, 0, sizeof(hash));
+
+	diff = 1;
+
+	for(i = start; i < start + size; i++) {
+		hash[arr[i]]++;
+	}
+	
+	cumulative_sum(hash, 26);
+
+	for(i = start + size - 1; i >= start; i--) {
+		new_arr[i - start] = (hash[arr[i]] - diff) % 10;
+		hash[arr[i]]--;
 	}
 
 	return new_arr;
@@ -140,3 +173,19 @@ int* chain_addition(int *arr, int size) {
 
 	return new_arr;
 }
+
+int* join(int* a, int sa, int *b, int sb) {
+	int total = sa + sb, i;
+	int* res = malloc(sizeof(int) * total);
+	
+	for(i = 0; i < sa; i++) {
+		res[i] = a[i];
+	}
+
+	for(; i < sa + sb; i++) {
+		res[i] = b[i - sa];
+	}
+	return res;
+}
+
+
