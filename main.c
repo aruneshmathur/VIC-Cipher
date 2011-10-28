@@ -12,6 +12,7 @@ int main() {
 
 	int* sub_result = modular_subtraction_digit(random_ig, date, 5);
 	char* key_phrase = "IDREAMOFJEANNIEWITHT";
+	char* message = "WE ARE PLEASED TO HEAR OF YOUR SUCCESS IN ESTABLISHING YOUR FALSE IDENTITY YOU WILL BE SENT SOME MONEY TO COVER EXPENSES WITHIN A MONTH";
 
 	int* first = assign_char(key_phrase, 0, 10, 65); 
 	int* second = assign_char(key_phrase, 10, 10, 65); 
@@ -38,9 +39,13 @@ int main() {
 	int** trans_res = transpose(assign_res, pseudo_random, 10, 5);
 
 	int* header_checker = assign_int(pseudo_random[4], 0, 10);
-	for(i = 0; i < 10; i++) {
-		printf("%d ", header_checker[i]);
-	}
+
+	int* encode_result = encode(message, header_checker, strlen(message));
+
+	int first = 8 + pseudo_random[4][8];
+	int second = 8 + pseudo_random[4][9];
+
+
 	/*int a[10] = {0, 2, 2, 1, 2, 1, 5, 8, 3, 1};
 	int **b, *c, *d; int i, first, second;
 	char *e;
