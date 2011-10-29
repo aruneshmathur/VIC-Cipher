@@ -5,7 +5,7 @@
 
 int main() {
 
-	int i;
+	int i, j, count = 0;
 	int date[5] = {7, 4, 1, 7, 7};
 	int random_ig[5] = {7, 7, 6, 5, 1};
 	int* temp;
@@ -42,10 +42,25 @@ int main() {
 
 	int* encode_result = encode(message, header_checker, strlen(message));
 
-	int first = 8 + pseudo_random[4][8];
-	int second = 8 + pseudo_random[4][9];
+	int first_num = 8 + pseudo_random[4][8];
+	int second_num = 8 + pseudo_random[4][9];
 
+	int** transpose_res = transpose(assign_res, pseudo_random, 10, 5);
+	
+	int* transpose_select = malloc(sizeof(int) * first_num + second_num);
 
+	for(i = 0; i < 10; i++) {
+		for(j = 0; j < 5; j++) {
+			transpose_select[count++] = transpose_res[i][j];
+			if (count == 31) break;
+		}
+			if (count == 31) break;
+	}
+
+	for(i = 0; i < first_num + second_num; i++) {
+		printf("%d ", transpose_select[i]);
+	}
+	
 	/*int a[10] = {0, 2, 2, 1, 2, 1, 5, 8, 3, 1};
 	int **b, *c, *d; int i, first, second;
 	char *e;
