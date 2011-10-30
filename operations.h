@@ -11,4 +11,5 @@ int* chain_addition(int* , int);
 int* join(int*, int, int*, int);
 int** get_matrix(int* array, int size, int columns);
 int get_encode_message_length(int*);
-int** get_matrix_filled(int**, int, int, int*, int) {
+int** get_matrix_filled(int**, int, int, int, int*, int);
+int* copy(int* arr, int start, int end);

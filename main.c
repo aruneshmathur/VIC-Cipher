@@ -60,14 +60,19 @@ int main() {
 
 	int** message_matrix = get_matrix(encode_result, encode_result_length, first_num);
 
-	int rows = (encode_result_length + 5 - (encode_result_length % 5))/first_num;
+	int elecount = (encode_result_length + 5 - (encode_result_length % 5));
+	int rows = elecount/first_num;
 	if(encode_result_length % first_num !=  0) rows =rows + 1;
 
 	int** inter_trans = transpose(transpose_select, message_matrix, first_num, rows);
+
+	int* new_header = copy(transpose_select, first_num, first_num + second_num);
+
+	int** second_num_trans = get_matrix_filled(inter_trans, first_num, rows, elecount, new_header, second_num);
 	
-	for(i = 0; i < first_num; i++) {
-		for(j = 0; j < rows; j++) {
-			printf("%d ", inter_trans[i][j]); 
+	for(i = 0; i < 9; i++) {
+		for(j = 0; j < second_num; j++) {
+			printf("%d ", second_num_trans[i][j]); 
 		}
 		printf("\n");
 	}

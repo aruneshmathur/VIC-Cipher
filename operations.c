@@ -221,6 +221,70 @@ int get_encode_message_length(int* array) {
 	return length;
 }
 
-int** get_matrix_filled(int** to_fill, int rows, int columns, int* header, int size) {
+int* copy(int* arr, int start, int end) {
+	int* res = malloc(sizeof(int) * (end - start)), i;
+	
+	for(i = start; i < end; i++) {
+		res[i - start] = arr[i];
+	}
 
+	return res;
+}	
+
+int find_location(int* arr, int* marked, int size, int ele) {
+	int i;
+	
+	for(i = 0; i < size; i++) {
+		if(arr[i] == ele && marked[i] != 1) {
+			marked[i] = 1;
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+
+int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* header, int size) {
+	
+	int left = ele_count % size, res_rows = 0, i, j, k, m, n, p;
+
+	change(header, size, 0, 10);	
+
+	res_rows = ele_count / size;
+	
+	if(left != 0) res_rows = res_rows + 1;
+
+	int** res = malloc(sizeof(int*) * res_rows);
+	int* marked = malloc(sizeof(int) * size);
+
+	for(i = 0; i < res_rows; i++) {
+		res[i] = malloc(sizeof(int) * size);
+	}
+
+	i = j = k = p = 0;
+	m = 1; n = -1;
+	for(i = 0; i < res_rows; i++) {
+		if((n == -1) && (n = find_location(header, marked, size, m)) == -1) {
+			i--; m++;
+			continue;
+		}
+		for(j = 0; j < n; j++) {
+			if(from[k][p] != -1) res[i][j] = from[k][p];
+			else if(j != 0) j--;
+			p++;
+			if(p == cols) {
+				k++; p = 0; 
+			}
+		}
+		n++;
+		if(n > size) {
+			n = -1;
+		}
+	}
+	
+	change(header, size, 10, 0);	
+
+	return res;
+	
 }
