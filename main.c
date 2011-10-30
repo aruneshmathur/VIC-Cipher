@@ -6,7 +6,7 @@
 int main() {
 
 	int i, j, count = 0;
-	int date[5] = {7, 4, 1, 7, 7};
+	int date[6] = {7, 4, 1, 7, 7, 6};
 	int random_ig[5] = {7, 7, 6, 5, 1};
 	int* temp;
 
@@ -61,7 +61,7 @@ int main() {
 	int** message_matrix = get_matrix(encode_result, encode_result_length, first_num);
 
 	int elecount = (encode_result_length + 5 - (encode_result_length % 5));
-	int rows = elecount/first_num;
+	int rows = elecount / first_num;
 	if(encode_result_length % first_num !=  0) rows =rows + 1;
 
 	int** inter_trans = transpose(transpose_select, message_matrix, first_num, rows);
@@ -69,12 +69,25 @@ int main() {
 	int* new_header = copy(transpose_select, first_num, first_num + second_num);
 
 	int** second_num_trans = get_matrix_filled(inter_trans, first_num, rows, elecount, new_header, second_num);
+
+	rows = elecount / second_num;
+	if(encode_result_length % second_num !=  0) rows =rows + 1;
+	int** final_res = transpose(new_header, second_num_trans, second_num, rows);
 	
-	for(i = 0; i < 9; i++) {
-		for(j = 0; j < second_num; j++) {
-			printf("%d ", second_num_trans[i][j]); 
+	elecount = 1;
+	
+	for(i = 0; i < second_num; i++) {
+		for(j = 0; j < rows; j++) {
+			if(final_res[i][j] != -1) {
+				printf("%d ", final_res[i][j]); 
+				elecount++;	
+				if(((elecount) % date[5]) == 0) {
+					elecount = 1; 
+					printf("\n");
+				}				
+			}
 		}
-		printf("\n");
 	}
+
 	return 0;
 }

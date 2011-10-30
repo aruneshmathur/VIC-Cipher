@@ -257,9 +257,11 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 
 	int** res = malloc(sizeof(int*) * res_rows);
 	int* marked = malloc(sizeof(int) * size);
+	int* back_track = malloc(sizeof(int) * res_rows);
 
 	for(i = 0; i < res_rows; i++) {
 		res[i] = malloc(sizeof(int) * size);
+		memset(res[i], -1, size * sizeof(int));
 	}
 
 	i = j = k = p = 0;
@@ -269,6 +271,9 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 			i--; m++;
 			continue;
 		}
+
+		back_track[i] = n;
+
 		for(j = 0; j < n; j++) {
 			if(from[k][p] != -1) res[i][j] = from[k][p];
 			else if(j != 0) j--;
@@ -277,12 +282,25 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 				k++; p = 0; 
 			}
 		}
+
 		n++;
 		if(n > size) {
 			n = -1;
 		}
 	}
 	
+	for(i = 0; i < res_rows; i++) {
+ 		for(j = back_track[i]; j < size; j++) {
+			if(k >= rows) { res[i][j] = -1; continue; }
+			if(from[k][p] != -1) res[i][j] = from[k][p];
+			else if(j != 0) j--;
+			p++;
+			if(p == cols) {
+				k++; p = 0; 
+			}
+		}
+	}
+
 	change(header, size, 10, 0);	
 
 	return res;
