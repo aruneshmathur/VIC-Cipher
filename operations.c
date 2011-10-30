@@ -188,4 +188,39 @@ int* join(int* a, int sa, int *b, int sb) {
 	return res;
 }
 
+int** get_matrix(int* array, int size, int columns) {
+	
+	int temp = 5 - (size % 5), rows, i, j, left = size % columns, count = 0, lim, newsize;
+	newsize = size + temp;
+	rows = newsize / columns;
 
+	if(left != 0) rows = rows + 1;
+	int** result = malloc(sizeof(int*) * rows);
+
+	for(i = 0; i < rows; i++) {
+		result[i] = malloc(sizeof(int) * columns);
+		memset(result[i], -1, columns * sizeof(int));
+	}
+	
+	for(i = 0; i < rows; i++) {
+		lim = (((i == rows - 1) && (left != 0))? left + newsize - size : columns);
+		for(j = 0; j < lim; j++) {
+			result[i][j] = (count >= size) ? 9 : array[count++];
+		}
+	}
+	
+	return result; 
+}
+
+int get_encode_message_length(int* array) {
+	int length = 0;
+	while(*array++ != -1) {
+		length++;
+	}
+
+	return length;
+}
+
+int** get_matrix_filled(int** to_fill, int rows, int columns, int* header, int size) {
+
+}

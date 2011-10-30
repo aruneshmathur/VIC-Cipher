@@ -41,6 +41,7 @@ int main() {
 	int* header_checker = assign_int(pseudo_random[4], 0, 10);
 
 	int* encode_result = encode(message, header_checker, strlen(message));
+	int encode_result_length = get_encode_message_length(encode_result);
 
 	int first_num = 8 + pseudo_random[4][8];
 	int second_num = 8 + pseudo_random[4][9];
@@ -57,43 +58,18 @@ int main() {
 			if (count == 31) break;
 	}
 
-	for(i = 0; i < first_num + second_num; i++) {
-		printf("%d ", transpose_select[i]);
+	int** message_matrix = get_matrix(encode_result, encode_result_length, first_num);
+
+	int rows = (encode_result_length + 5 - (encode_result_length % 5))/first_num;
+	if(encode_result_length % first_num !=  0) rows =rows + 1;
+
+	int** inter_trans = transpose(transpose_select, message_matrix, first_num, rows);
+	
+	for(i = 0; i < first_num; i++) {
+		for(j = 0; j < rows; j++) {
+			printf("%d ", inter_trans[i][j]); 
+		}
+		printf("\n");
 	}
-	
-	/*int a[10] = {0, 2, 2, 1, 2, 1, 5, 8, 3, 1};
-	int **b, *c, *d; int i, first, second;
-	char *e;
-	b= malloc(sizeof(int*) *5);
-	c=a;
-	
-	for(i=0;i<5;i++) {
-		c=chain_addition(c,10);
-		b[i]=c;
-	
-	}
-		
- 	transpose(a, b, 10, 5);
-
-	first = b[4][8];
-	second = b[4][9];
-
-	printf("%d %d\n", first, second);
-
-	e = "WE ARE PLEASED TO HEAR OF YOUR SUCCESS IN ESTABLISHING YOUR FALSE IDENTITY YOU WILL BE SENT SOME MONEY TO COVER EXPENSES WITHIN A MONTH";
-
-	d = encode(e, a, 135);
-
-	i=0;
-
-	while(d[i] != -1) {
-		printf("%d ", d[i]);
-		i++;
-	}
-
-	
-
-	printf("\n");*/
-	
 	return 0;
 }
