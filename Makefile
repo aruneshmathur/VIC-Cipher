@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -pedantic -Wall -g
 
-a.out: checkerboard.o main.o operations.o
-	$(CC) $(CFLAGS) -o a.out checkerboard.o main.o operations.o
+vic-cipher: checkerboard.o main.o operations.o
+	$(CC) $(CFLAGS) -o vic-cipher checkerboard.o main.o operations.o
 
 checkerboard.o: checkerboard.c checkerboard.h
 	$(CC) $(CFLAGS) -c checkerboard.c
