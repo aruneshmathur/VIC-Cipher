@@ -2,18 +2,23 @@
 #include<stdlib.h>
 #include<string.h>
 #include "operations.h"
+#include "args.h"
 
 int main() {
 
 	int i, j, count = 0, encode_result_length, first_num, second_num, elecount, rows;
-	int date[6] = {7, 4, 1, 7, 7, 6};
-	int random_ig[5] = {7, 7, 6, 5, 1};
-	int *temp, *first_app_res, *assign_res, *header_checker, *encode_result, *transpose_select, *new_header;
+
+	int *date = DEFAULT_DATE;
+	int *random_ig = DEFAULT_RANDOM;
+
+	/*Initialize the pointers that we'll need later */
+	int *temp, *first_app_res, *assign_res, *header_checker;
+	int *encode_result, *transpose_select, *new_header;
 	int **pseudo_random, **transpose_res, **second_num_trans, **final_res, **inter_trans, **message_matrix;
 
 	int* sub_result = modular_subtraction_digit(random_ig, date, 5);
 	char* key_phrase = "IDREAMOFJEANNIEWITHT";
-	char* message = "WE ARE PLEASED TO HEAR OF YOUR SUCCESS IN ESTABLISHING YOUR FALSE IDENTITY YOU WILL BE SENT SOME MONEY TO COVER EXPENSES WITHIN A MONTH";
+	char* message = DEFAULT_MESSAGE;
 
 	int* first = assign_char(key_phrase, 0, 10, 65); 
 	int* second = assign_char(key_phrase, 10, 10, 65); 

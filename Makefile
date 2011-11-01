@@ -10,6 +10,6 @@ checkerboard.o: checkerboard.c checkerboard.h
 operations.o: operations.c checkerboard.h
 	$(CC) $(CFLAGS) -c operations.c
 
-main.o: main.c operations.h
+main.o: main.c operations.h args.h
 	$(CC) $(CFLAGS) -c main.c
 
