@@ -1,31 +1,97 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>     
 #include "operations.h"
 #include "args.h"
 
-int main() {
+int main(int argc, char **argv) {
 
-	int i, j, count = 0, encode_result_length, first_num, second_num, elecount, rows;
+	int i, j, count = 0, encode_result_length, first_num, second_num, elecount, rows, personal_number = DEFAULT_PERSONAL_NUMBER, c;
+	char t;
 
 	int *date = DEFAULT_DATE;
 	int *random_ig = DEFAULT_RANDOM;
 
 	/*Initialize the pointers that we'll need later */
-	int *temp, *first_app_res, *assign_res, *header_checker;
-	int *encode_result, *transpose_select, *new_header;
+	int *temp, *first_app_res, *assign_res, *header_checker, *first, *second;
+	int *encode_result, *transpose_select, *new_header, *chain_res, *append_res, *sub_result;
 	int **pseudo_random, **transpose_res, **second_num_trans, **final_res, **inter_trans, **message_matrix;
 
-	int* sub_result = modular_subtraction_digit(random_ig, date, 5);
-	char* key_phrase = "IDREAMOFJEANNIEWITHT";
-	char* message = DEFAULT_MESSAGE;
+	char *key_phrase = DEFAULT_KEYPHRASE;
+	char *message = DEFAULT_MESSAGE;
 
-	int* first = assign_char(key_phrase, 0, 10, 65); 
-	int* second = assign_char(key_phrase, 10, 10, 65); 
+	while ((c = getopt(argc, argv, "d:p:k:m:r:")) != -1)
+        	switch (c) {
+			case 'd':
 
-	int* chain_res = chain_addition(sub_result, 5);
+				date = malloc(sizeof(int) * strlen(optarg));
+				i = 0;
+				while(i < strlen(optarg)) {
+					t = optarg[i];
+					if(t == 0) {
+						fprintf (stderr, "Option -%c must be in the form DDMMYYYY.\n", optopt);
+						return -1;
+					}
+					date[i++] = atoi(&t);
+				}
 
-	int* append_res = join(sub_result, 5, chain_res, 5);
+				
+			break;
+
+		        case 'p':
+				personal_number = atoi(optarg);
+
+				if(t <= 0) {
+					fprintf (stderr, "Option -%c must be > 0.\n", optopt);
+					return -1;
+				}
+		        break;
+
+			case 'r':		
+				random_ig = malloc(sizeof(int) * strlen(optarg));
+				i = 0;
+				while(i < strlen(optarg)) {
+					t = optarg[i];
+					if(t == 0) {
+						fprintf (stderr, "Option -%c is invalid.\n", optopt);
+						return -1;
+					}
+					random_ig[i++] = atoi(&t);			
+				}
+
+			break;
+	
+			case 'k':
+				key_phrase = optarg;
+			break;
+
+			case 'm':
+				message = optarg;
+			break;
+
+	                case '?':
+             			if (optopt == 'k' || optopt == 'm' || optopt == 'd' || optopt == 'p')
+					fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+			        else if (isprint (optopt))
+					fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+             			else
+			                fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
+                                return -1;
+			default:
+				abort();
+				return -1;
+        }
+	
+	sub_result = modular_subtraction_digit(random_ig, date, 5);
+
+	first = assign_char(key_phrase, 0, 10, 65); 
+	second = assign_char(key_phrase, 10, 10, 65); 
+
+	chain_res = chain_addition(sub_result, 5);
+
+	append_res = join(sub_result, 5, chain_res, 5);
 	
 	free(sub_result);
 	free(chain_res);
@@ -49,8 +115,8 @@ int main() {
 
 	encode_result_length = get_encode_message_length(encode_result);
 
-	first_num = 8 + pseudo_random[4][8];
-	second_num = 8 + pseudo_random[4][9];
+	first_num = personal_number + pseudo_random[4][8];
+	second_num = personal_number + pseudo_random[4][9];
 
 	transpose_res = transpose(assign_res, pseudo_random, 10, 5);
 	free(temp);

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -ansi -pedantic -Wall -g
+CFLAGS = -pedantic -Wall -g
 
 a.out: checkerboard.o main.o operations.o
 	$(CC) $(CFLAGS) -o a.out checkerboard.o main.o operations.o
