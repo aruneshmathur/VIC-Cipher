@@ -5,11 +5,14 @@
 #include "operations.h"
 
 int* encode(char* message, int* header, int length) {
+	
 	int i, t, count;
+	
 	int *result = malloc(sizeof(int) * length * 2); 
 	count = 0;
+
 	init_checkerboard(header, 10);
-	
+
 	for(i = 0; i < length; i++) {
 		if(message[i] == ' ') continue;
 		t = get_val(message[i]);
@@ -29,7 +32,6 @@ int* encode(char* message, int* header, int length) {
 	}
 
 	result[count] = -1;
-
 	free_checkerboard();
 	return result;
 }
@@ -83,12 +85,12 @@ int** transpose(int* header, int **array, int header_columns, int array_rows) {
 	return m;
 }
 
-int* map_change(int* code, int *input, int size) {
+int* map_change(int *code, int *input, int size) {
 
 	int* result = malloc(sizeof(int) * size), i;
 	
 	for(i = 0; i < size; i++) {
-		result[i] = code[input[i] - 1];
+		result[i] = code[(input[i] - 1 + 10) % 10];
 	}
 
 	return result;
@@ -117,7 +119,7 @@ int* modular_addition_digit(int *a, int *b, int size) {
 int* assign_char(char* arr, int start, int size, int b) {
 
  	int hash[26], base, i, diff;
-	int* new_arr = malloc(sizeof(arr));
+	int* new_arr = malloc(size * sizeof(int));
 
 	memset(hash, 0, sizeof(hash));
 
@@ -141,7 +143,7 @@ int* assign_char(char* arr, int start, int size, int b) {
 int* assign_int(int* arr, int start, int size) {
 
  	int hash[26], i, diff;
-	int* new_arr = malloc(sizeof(arr));
+	int* new_arr = malloc(sizeof(int) * size);
 
 	memset(hash, 0, sizeof(hash));
 
@@ -232,7 +234,7 @@ int* copy(int* arr, int start, int end) {
 }	
 
 int find_location(int* arr, int* marked, int size, int ele) {
-	int i;
+	int i = 0;
 	
 	for(i = 0; i < size; i++) {
 		if(arr[i] == ele && marked[i] != 1) {
@@ -246,18 +248,23 @@ int find_location(int* arr, int* marked, int size, int ele) {
 
 
 int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* header, int size) {
-	
-	int left = ele_count % size, res_rows = 0, i, j, k, m, n, p;
+
+	int left = ele_count % size, res_rows = 0, i, j, k, m, n, p, flag = 0;
 
 	change(header, size, 0, 10);	
 
 	res_rows = ele_count / size;
+
 	
 	if(left != 0) res_rows = res_rows + 1;
+
 
 	int** res = malloc(sizeof(int*) * res_rows);
 	int* marked = malloc(sizeof(int) * size);
 	int* back_track = malloc(sizeof(int) * res_rows);
+
+
+	memset(marked, 0, size * sizeof(int));
 
 	for(i = 0; i < res_rows; i++) {
 		res[i] = malloc(sizeof(int) * size);
@@ -266,15 +273,23 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 
 	i = j = k = p = 0;
 	m = 1; n = -1;
+
+
 	for(i = 0; i < res_rows; i++) {
 		if((n == -1) && (n = find_location(header, marked, size, m)) == -1) {
-			i--; m++;
+			i = (i==0) ? 0 : i--;
+                        m++;
+			
 			continue;
 		}
-
+		
 		back_track[i] = n;
 
 		for(j = 0; j < n; j++) {
+			if(k >= rows) {
+				flag = 1; break;
+			}
+
 			if(from[k][p] != -1) res[i][j] = from[k][p];
 			else if(j != 0) j--;
 			p++;
@@ -283,6 +298,9 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 			}
 		}
 
+
+
+		if(flag == 1) break;
 		n++;
 		if(n > size) {
 			n = -1;

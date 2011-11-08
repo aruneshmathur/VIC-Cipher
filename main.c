@@ -1,14 +1,15 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <string.h>     
+#include <string.h>  
+#include <unistd.h>   
 #include "operations.h"
 #include "args.h"
 
 int main(int argc, char **argv) {
 
 	int i, j, count = 0, encode_result_length, first_num, second_num, elecount, rows, personal_number = DEFAULT_PERSONAL_NUMBER, c;
+	int date_len;
 	char t;
 
 	int *date = DEFAULT_DATE;
@@ -22,49 +23,36 @@ int main(int argc, char **argv) {
 	char *key_phrase = DEFAULT_KEYPHRASE;
 	char *message = DEFAULT_MESSAGE;
 
-	while ((c = getopt(argc, argv, "d:p:k:m:r:")) != -1)
+
+	while ((c = getopt_long(argc, argv, "d:p:k:m:", longopts, NULL)) != -1)
         	switch (c) {
 			case 'd':
-
-				date = malloc(sizeof(int) * strlen(optarg));
+				date_len = strlen(optarg);
+				date = malloc(sizeof(int) * date_len);
 				i = 0;
 				while(i < strlen(optarg)) {
 					t = optarg[i];
 					if(t == 0) {
-						fprintf (stderr, "Option -%c must be in the form DDMMYYYY.\n", optopt);
+						fprintf (stderr, "--date must be in the form DDMMYYYY.\n");
 						return -1;
 					}
 					date[i++] = atoi(&t);
 				}
 
-				
 			break;
 
 		        case 'p':
 				personal_number = atoi(optarg);
 
-				if(t <= 0) {
-					fprintf (stderr, "Option -%c must be > 0.\n", optopt);
+				if(personal_number > 16) {
+					fprintf (stderr, "--personal must be < 16 strictly.\n");
 					return -1;
 				}
 		        break;
-
-			case 'r':		
-				random_ig = malloc(sizeof(int) * strlen(optarg));
-				i = 0;
-				while(i < strlen(optarg)) {
-					t = optarg[i];
-					if(t == 0) {
-						fprintf (stderr, "Option -%c is invalid.\n", optopt);
-						return -1;
-					}
-					random_ig[i++] = atoi(&t);			
-				}
-
-			break;
 	
 			case 'k':
 				key_phrase = optarg;
+				if(strlen(key_phrase) != 20) fprintf (stderr, "--personal must be < 16 strictly.\n");
 			break;
 
 			case 'm':
@@ -83,7 +71,9 @@ int main(int argc, char **argv) {
 				abort();
 				return -1;
         }
-	
+
+
+
 	sub_result = modular_subtraction_digit(random_ig, date, 5);
 
 	first = assign_char(key_phrase, 0, 10, 65); 
@@ -97,6 +87,8 @@ int main(int argc, char **argv) {
 	free(chain_res);
 	
 	first_app_res = modular_addition_digit(first, append_res, 10);
+
+
 	
 	assign_res = map_change(second, first_app_res, 10);
 	free(first_app_res);
@@ -109,26 +101,26 @@ int main(int argc, char **argv) {
 		pseudo_random[i]=temp;
 	}
 	
+
 	header_checker = assign_int(pseudo_random[4], 0, 10);
 
 	encode_result = encode(message, header_checker, strlen(message));
-
 	encode_result_length = get_encode_message_length(encode_result);
 
 	first_num = personal_number + pseudo_random[4][8];
 	second_num = personal_number + pseudo_random[4][9];
-
+	
 	transpose_res = transpose(assign_res, pseudo_random, 10, 5);
 	free(temp);
 	
-	transpose_select = malloc(sizeof(int) * first_num + second_num);
+	transpose_select = malloc(sizeof(int) * (first_num + second_num));
 
 	for(i = 0; i < 10; i++) {
 		for(j = 0; j < 5; j++) {
 			transpose_select[count++] = transpose_res[i][j];
-			if (count == 31) break;
+			if (count == (first_num + second_num)) break;
 		}
-			if (count == 31) break;
+			if (count == (first_num + second_num)) break;
 	}
 
 	message_matrix = get_matrix(encode_result, encode_result_length, first_num);
@@ -138,6 +130,7 @@ int main(int argc, char **argv) {
 	rows = elecount / first_num;
 	if(encode_result_length % first_num !=  0) rows =rows + 1;
 
+	
 	inter_trans = transpose(transpose_select, message_matrix, first_num, rows);
 
 	new_header = copy(transpose_select, first_num, first_num + second_num);
@@ -150,6 +143,8 @@ int main(int argc, char **argv) {
 	free(new_header);
 	
 	elecount = 1;
+
+	date[5] = (date[5] == 0) ? 10: date[5];
 	
 	for(i = 0; i < second_num; i++) {
 		for(j = 0; j < rows; j++) {
