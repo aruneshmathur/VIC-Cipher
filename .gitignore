@@ -1,3 +1,4 @@
 vic-cipher
 *~
 *.o
+*.txt

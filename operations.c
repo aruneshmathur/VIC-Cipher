@@ -44,6 +44,14 @@ void change(int *arr, int size, int from, int to) {
 	}
 }
 
+void change_start(int *arr, int start, int size, int from, int to) {
+
+	int i;
+	for(i = start; i < start + size; i++) {
+		if(arr[i] == from) arr[i] = to;
+	}
+}
+
 void cumulative_sum(int *a, int size) {
 	int i;
 	for(i = 1; i < size; i++) {
@@ -142,10 +150,12 @@ int* assign_char(char* arr, int start, int size, int b) {
 
 int* assign_int(int* arr, int start, int size) {
 
- 	int hash[26], i, diff;
+ 	int hash[11], i, diff;
 	int* new_arr = malloc(sizeof(int) * size);
 
 	memset(hash, 0, sizeof(hash));
+
+	change_start(arr, start, size, 0, 10);	
 
 	diff = 1;
 
@@ -153,12 +163,14 @@ int* assign_int(int* arr, int start, int size) {
 		hash[arr[i]]++;
 	}
 	
-	cumulative_sum(hash, 26);
+	cumulative_sum(hash, 11);
 
 	for(i = start + size - 1; i >= start; i--) {
-		new_arr[i - start] = (hash[arr[i]] - diff) % 10;
+		new_arr[i - start] = (hash[arr[i]]) % 10;
 		hash[arr[i]]--;
 	}
+
+	change_start(arr, start, size, 10, 0);	
 
 	return new_arr;
 }
@@ -184,20 +196,24 @@ int* join(int* a, int sa, int *b, int sb) {
 		res[i] = a[i];
 	}
 
-	for(; i < sa + sb; i++) {
+	for(; i < total; i++) {
 		res[i] = b[i - sa];
 	}
+
 	return res;
 }
 
 int** get_matrix(int* array, int size, int columns) {
 	
-	int temp = 5 - (size % 5), rows, i, j, left = size % columns, count = 0, lim, newsize;
+	int temp = (5 - (size % 5)) % 5, rows = 0, i, j, left, count = 0, lim, newsize;
+	int **result;
 	newsize = size + temp;
 	rows = newsize / columns;
 
+	left = newsize % columns;
+
 	if(left != 0) rows = rows + 1;
-	int** result = malloc(sizeof(int*) * rows);
+	result = malloc(sizeof(int*) * rows);
 
 	for(i = 0; i < rows; i++) {
 		result[i] = malloc(sizeof(int) * columns);
@@ -205,9 +221,10 @@ int** get_matrix(int* array, int size, int columns) {
 	}
 	
 	for(i = 0; i < rows; i++) {
-		lim = (((i == rows - 1) && (left != 0))? left + newsize - size : columns);
+		lim = (((i == rows - 1) && (left != 0))? left : columns);
 		for(j = 0; j < lim; j++) {
-			result[i][j] = (count >= size) ? 9 : array[count++];
+			result[i][j] = (count >= size) ? 9 : array[count];
+			count++;
 		}
 	}
 	
@@ -250,18 +267,20 @@ int find_location(int* arr, int* marked, int size, int ele) {
 int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* header, int size) {
 
 	int left = ele_count % size, res_rows = 0, i, j, k, m, n, p, flag = 0;
+	int **res;
+	int *marked, *back_track;
+
 
 	change(header, size, 0, 10);	
 
 	res_rows = ele_count / size;
 
-	
 	if(left != 0) res_rows = res_rows + 1;
 
 
-	int** res = malloc(sizeof(int*) * res_rows);
-	int* marked = malloc(sizeof(int) * size);
-	int* back_track = malloc(sizeof(int) * res_rows);
+	res = malloc(sizeof(int*) * res_rows);
+	marked = malloc(sizeof(int) * size);
+	back_track = malloc(sizeof(int) * res_rows);
 
 
 	memset(marked, 0, size * sizeof(int));
@@ -277,7 +296,7 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 
 	for(i = 0; i < res_rows; i++) {
 		if((n == -1) && (n = find_location(header, marked, size, m)) == -1) {
-			i = (i==0) ? 0 : i--;
+			i = ((i == 0) ? 0 : i--);
                         m++;
 			
 			continue;

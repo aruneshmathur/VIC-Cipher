@@ -10,9 +10,9 @@ int init_checkerboard(int *arr, int size) {
 	if(size != 10) return 0;	
 	header = arr;
 	
-	list = malloc(sizeof(int*) * 26);
+	list = malloc(sizeof(int*) * 28);
 
-	for(i = 0; i < 26; i++) {
+	for(i = 0; i < 28; i++) {
 		list[i] = malloc(sizeof(int));
 	}
 
@@ -44,6 +44,12 @@ int init_checkerboard(int *arr, int size) {
 	*list['X' - 65] = 80 + arr[5];
 	*list['Y' - 65] = 80 + arr[6];
 	*list['Z' - 65] = 80 + arr[7];
+
+	/* For period */	
+	*list[26] = 87;
+	
+	/* For / */
+	*list[27] = 89;
 	
 	return 1;
 }
@@ -51,6 +57,9 @@ int init_checkerboard(int *arr, int size) {
 int get_val(char c) {
 	int b;
 	if(header == NULL) return -1;
+	if(c == '.') return *list[26];
+	if(c == '/') return *list[27];
+	if(c >= 'a' && c <= 'z') c = c - 32;
 	b = (c - 65);
 
 	return *list[b];	
