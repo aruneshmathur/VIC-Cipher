@@ -150,14 +150,12 @@ int* assign_char(char* arr, int start, int size, int b) {
 
 int* assign_int(int* arr, int start, int size) {
 
- 	int hash[11], i, diff;
+ 	int hash[11], i;
 	int* new_arr = malloc(sizeof(int) * size);
 
 	memset(hash, 0, sizeof(hash));
 
 	change_start(arr, start, size, 0, 10);	
-
-	diff = 1;
 
 	for(i = start; i < start + size; i++) {
 		hash[arr[i]]++;
