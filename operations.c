@@ -248,12 +248,12 @@ int* copy(int* arr, int start, int end) {
 	return res;
 }	
 
-int find_location(int* arr, int* marked, int size, int ele) {
+int find_location(int* arr, int** marked, int size, int ele) {
 	int i = 0;
 	
 	for(i = 0; i < size; i++) {
-		if(arr[i] == ele && marked[i] != 1) {
-			marked[i] = 1;
+		if(arr[i] == ele && (*marked)[i] != 1) {
+			(*marked)[i] = 1;
 			return i;
 		}
 	}
@@ -293,22 +293,27 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 
 
 	for(i = 0; i < res_rows; i++) {
-		if((n == -1) && (n = find_location(header, marked, size, m)) == -1) {
-			i = ((i == 0) ? 0 : i--);
-                        m++;
-			
+
+		if((n == -1) && (n = find_location(header, &marked, size, m)) == -1) {
+			i = ((i == 0) ? 0 : i - 1);
+                        m++; n = -1;
 			continue;
 		}
 		
 		back_track[i] = n;
 
-		for(j = 0; j < n; j++) {
+		j = 0;
+		while(j < n) {
+
 			if(k >= rows) {
 				flag = 1; break;
 			}
 
-			if(from[k][p] != -1) res[i][j] = from[k][p];
-			else if(j != 0) j--;
+			if(from[k][p] != -1) {	
+				res[i][j] = from[k][p];
+				j++;
+			}
+
 			p++;
 			if(p == cols) {
 				k++; p = 0; 
@@ -318,10 +323,9 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 
 
 		if(flag == 1) break;
-		n++;
-		if(n > size) {
-			n = -1;
-		}
+
+		
+		n = (n >= size) ? -1 : (n + 1);
 	}
 	
 	for(i = 0; i < res_rows; i++) {

@@ -13,6 +13,7 @@ int main(int argc, char **argv) {
 	char t;
 
 	int *date = DEFAULT_DATE;
+	date_len = 6;
 	int *random_ig = DEFAULT_RANDOM;
 
 
@@ -337,8 +338,25 @@ int main(int argc, char **argv) {
 
 	second_num_trans = get_matrix_filled(inter_trans, first_num, rows, elecount, new_header, second_num);
 
+
 	rows = elecount / second_num;
 	if(encode_result_length % second_num !=  0) rows =rows + 1;
+
+	if(verbose == 1) {
+
+		printf("14. Filling in the matrix using the %d elements of 15 is:\n", second_num);
+
+		for(i = 0; i < rows; i++) {
+			for(j = 0; j < second_num; j++) 
+				printf("%d ", second_num_trans[i][j]);
+			printf("\n");
+		}
+
+		printf("\n\n");
+
+	}
+
+
 	final_res = transpose(new_header, second_num_trans, second_num, rows);
 	free(new_header);
 	
