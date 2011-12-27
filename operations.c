@@ -320,10 +320,7 @@ int** get_matrix_filled(int** from, int rows, int cols, int ele_count, int* head
 			}
 		}
 
-
-
 		if(flag == 1) break;
-
 		
 		n = (n >= size) ? -1 : (n + 1);
 	}

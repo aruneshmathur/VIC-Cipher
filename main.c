@@ -9,7 +9,7 @@
 int main(int argc, char **argv) {
 
 	int i, j, count = 0, encode_result_length, first_num, second_num, elecount, rows, personal_number = DEFAULT_PERSONAL_NUMBER, c;
-	int date_len, verbose = 0;
+	int date_len, verbose = 0, keyphrase_len;
 	char t;
 
 	int *date = DEFAULT_DATE;
@@ -23,6 +23,8 @@ int main(int argc, char **argv) {
 	int **pseudo_random, **transpose_res, **second_num_trans, **final_res, **inter_trans, **message_matrix;
 
 	char *key_phrase = DEFAULT_KEYPHRASE;
+	keyphrase_len = strlen(key_phrase);
+	
 	char *message = DEFAULT_MESSAGE;
 
 
@@ -55,6 +57,8 @@ int main(int argc, char **argv) {
 			case 'k':
 				key_phrase = optarg;
 				if(strlen(key_phrase) < 20) fprintf (stderr, "--personal must be < 16 strictly.\n");
+				if(strlen(key_phrase) % 2 != 0) fprintf (stderr, "--personal must be divisible by two.\n");
+				keyphrase_len = strlen(key_phrase);
 			break;
 
 			case 'm':
@@ -93,15 +97,15 @@ int main(int argc, char **argv) {
 
 	}
 
-	first = assign_char(key_phrase, 0, 10, 65); 
-	second = assign_char(key_phrase, 10, 10, 65); 
+	first = assign_char(key_phrase, 0, keyphrase_len / 2, 65); 
+	second = assign_char(key_phrase, keyphrase_len / 2, 10, 65); 
 
 
 	if(verbose == 1) {
 
 		printf("2. First character assigned result:\n");
 
-		for(i = 0; i < 10; i++) 
+		for(i = 0; i < keyphrase_len / 2; i++) 
 			printf("%d ", first[i]);
 
 		printf("\n\n");
@@ -109,7 +113,7 @@ int main(int argc, char **argv) {
 
 		printf("3. Second character assigned result:\n");
 
-		for(i = 0; i < 10; i++) 
+		for(i = 0; i < keyphrase_len / 2; i++) 
 			printf("%d ", second[i]);
 
 		printf("\n\n");
